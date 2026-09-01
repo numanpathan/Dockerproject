@@ -2,30 +2,29 @@ pipeline {
     agent any
     
     stages {
-        stage('checkout') {
+        stage('Checkout') {
             steps {
-                git 'https://github.com/numanpathan/Dockerproject.git'
+                git branch: 'main',
+                    url: 'https://github.com/numanpathan/Dockerproject.git'
             }
         }
-        stage('build') {
+
+        stage('Build') {
             steps {
                 sh 'docker build -t $image .'
             }
         }
+
         stage('tag') {
             steps {
                 sh 'docker tag $image $repo'
             }
         }
+
         stage('push') {
             steps {
-                sh 'docker login -u reyadocker -p $password'
+                sh 'docker login -u numan009 -p $password'
                 sh 'docker push $repo'
-            }
-        }
-        stage('deploy') {
-            steps {
-                sh 'docker stack deploy bank -c docker-compose.yml'
             }
         }
     }
